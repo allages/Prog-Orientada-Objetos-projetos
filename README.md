@@ -4,7 +4,7 @@ Este repositório contém o projeto de desenvolvimento de um **Sistema de Cinema
 
 ## 👥 Equipe
 * Allan Lucas Lages
-* Breno Bezerra de Araújo
+* Breno de Araújo Bezerra
 
 ## 📌 Escopo do Projeto
 O objetivo principal é implementar um sistema completo de gerenciamento de cinema focado em conceitos estruturais de POO, dividido em etapas de entrega:
