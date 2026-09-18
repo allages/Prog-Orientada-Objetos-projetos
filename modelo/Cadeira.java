@@ -5,10 +5,10 @@ public class Cadeira {
     private int coluna;
     private boolean ocupada;
 
-    public Cadeira(int linha, int coluna, boolean ocupado){
+    public Cadeira(int linha, int coluna, boolean ocupada){
         this.linha = linha;
         this.coluna = coluna;
-        this.ocupada = ocupado;
+        this.ocupada = ocupada;
     }
 
     public int getLinha(){
