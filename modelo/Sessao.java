@@ -29,6 +29,12 @@ public class Sessao {
     public void setHorario(String horario){
         this.horario = horario;
     }
+    public Cadeira getCadeira(int linha, int coluna) {
+        if (linha >= 0 && linha < 10 && coluna >= 0 && coluna < 15) {
+            return cadeiras[linha][coluna];
+        }
+        return null;
+    }
 
 
 }
