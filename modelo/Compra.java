@@ -72,4 +72,22 @@ public class Compra {
     public void setValorTotal(double valorTotal) {
         this.valorTotal = valorTotal;
     }
+    public boolean adicionarBilhete(Bilhete bilhete , CupomPromocional cupom){
+        if (adicionarBilhete(bilhete)){
+            valorTotal -= bilhete.getValor() * cupom.getDesconto();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean adicionarItem(String item , double valorItem , CupomPromocional cupom) {
+        if(adicionarItem(item, valorItem)){
+            valorTotal -= valorItem * cupom.getDesconto();
+            return true;
+        }
+        return false;
+    }
+    public boolean adicionarItem(Produto produto){
+        return adicionarItem(produto.getNome() , produto.getValor());
+    }
 }
