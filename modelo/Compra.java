@@ -38,7 +38,7 @@ public class Compra {
     public void cancelarCompra(Sessao sessao) {
         for (int i = 0; i < qtdBilhetes; i++) {
             if (bilhetes[i] != null && bilhetes[i].getCadeira() != null) {
-                sessao.liberarCadeira(
+                sessao.getCadeira(
                     bilhetes[i].getCadeira().getLinha(),
                     bilhetes[i].getCadeira().getColuna()
                 );
