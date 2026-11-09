@@ -38,10 +38,13 @@ public class Compra {
     public void cancelarCompra(Sessao sessao) {
         for (int i = 0; i < qtdBilhetes; i++) {
             if (bilhetes[i] != null && bilhetes[i].getCadeira() != null) {
-                sessao.getCadeira(
+                Cadeira cadeira = sessao.getCadeira(
                     bilhetes[i].getCadeira().getLinha(),
                     bilhetes[i].getCadeira().getColuna()
                 );
+                if (cadeira != null) {
+                    cadeira.setOcupada(false);
+                }
             }
         }
         this.qtdBilhetes = 0;

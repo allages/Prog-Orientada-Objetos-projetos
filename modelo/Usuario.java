@@ -126,4 +126,9 @@ public class Usuario {
     public void removerCompra(Compra compra) {
         compras.remove(compra);
     }
+
+    // Retorna o valor a pagar pela compra. Subclasses sobrescrevem para aplicar regras próprias.
+    public double comprarBilhete(Compra compra) {
+        return compra.getValorTotal();
+    }
 }
