@@ -93,4 +93,8 @@ public class Compra {
     public boolean adicionarItem(Produto produto){
         return adicionarItem(produto.getNome() , produto.getValor());
     }
+
+    public boolean adicionarItem(Produto produto, CupomPromocional cupom) {
+        return adicionarItem(produto.getNome(), produto.getValor(), cupom);
+    }
 }
