@@ -127,6 +127,25 @@ public class Usuario {
         compras.remove(compra);
     }
 
+    public boolean alterarCompra(Compra antiga, Compra nova) {
+        for (int i = 0; i < compras.size(); i++) {
+            if (compras.get(i) == antiga) {
+                compras.set(i, nova);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean cancelarCompra(Compra compra, Sessao sessao) {
+        if (!compras.contains(compra)) {
+            return false;
+        }
+        compra.cancelarCompra(sessao);
+        compras.remove(compra);
+        return true;
+    }
+
     // Retorna o valor a pagar pela compra. Subclasses sobrescrevem para aplicar regras próprias.
     public double comprarBilhete(Compra compra) {
         return compra.getValorTotal();
