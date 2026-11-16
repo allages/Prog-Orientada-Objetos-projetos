@@ -10,6 +10,8 @@ import modelo.Sala;
 import modelo.Sessao;
 import modelo.Usuario;
 import modelo.VendasException;
+import modelo.Cadeira;
+import modelo.Produto;
 
 public class CompraController {
     private List<Sala> salas;
@@ -77,5 +79,61 @@ public class CompraController {
             compra.adicionarBilhete(bilhete, cupom);
         }
         return bilhete;
+    }
+
+
+    public Cadeira[] sugerirCadeiras(Sessao sessao, int quantidade) throws VendasException {
+        Cadeira[] sugestao = sessao.sugerirCadeirasJuntas(quantidade);
+        if (sugestao == null) {
+            throw new VendasException("Não há " + quantidade + " cadeiras juntas disponíveis nesta sessão");
+        }
+        return sugestao;
+    }
+
+    public List<Bilhete> comprarBilhetes(Compra compra, Usuario usuario, Sala sala, Sessao sessao,
+                                         Cadeira[] cadeiras, CupomPromocional cupom) throws VendasException {
+        sessao.validarVenda();
+
+        if (compra.getQtdBilhetes() + cadeiras.length > compra.getBilhetes().length) {
+            throw new VendasException("Limite de bilhetes da compra atingido");
+        }
+
+        List<Cadeira> ocupadas = new ArrayList<>();
+        try {
+            for (Cadeira c : cadeiras) {
+                sessao.ocuparCadeira(c.getLinha(), c.getColuna());
+                ocupadas.add(c);
+            }
+        } catch (VendasException e) {
+            for (Cadeira c : ocupadas) {
+                sessao.getCadeira(c.getLinha(), c.getColuna()).setOcupada(false);
+            }
+            throw e;
+        }
+
+        List<Bilhete> bilhetes = new ArrayList<>();
+        for (Cadeira c : cadeiras) {
+            Bilhete bilhete = new Bilhete(usuario.getUser(), usuario.getCpf(), sala, sessao.getFilme(),
+                    sessao, sala.calcularValor(sessao.getFilme()), sessao.getCadeira(c.getLinha(), c.getColuna()));
+            if (cupom == null) {
+                compra.adicionarBilhete(bilhete);
+            } else {
+                compra.adicionarBilhete(bilhete, cupom);
+            }
+            bilhetes.add(bilhete);
+        }
+        return bilhetes;
+    }
+
+    public void adicionarItem(Compra compra, Produto produto, CupomPromocional cupom) throws VendasException {
+        boolean adicionou;
+        if (cupom == null) {
+            adicionou = compra.adicionarItem(produto);
+        } else {
+            adicionou = compra.adicionarItem(produto, cupom);
+        }
+        if (!adicionou) {
+            throw new VendasException("Limite de itens da compra atingido");
+        }
     }
 }
