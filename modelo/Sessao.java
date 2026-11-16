@@ -48,6 +48,33 @@ public class Sessao {
         cadeira.setOcupada(true);
     }
 
+    public Cadeira[] sugerirCadeirasJuntas(int quantidade) {
+        if (quantidade < 1 || quantidade > 15) {
+            return null;
+        }
+
+        for (int i = 0; i < 10; i+=1) {
+            int seguidas = 0;
+
+            for (int j = 0; j < 15; j+=1) {
+                if (cadeiras[i][j].isOcupada()) {
+                    seguidas = 0;
+                } else {
+                    seguidas+=1;
+                }
+
+                if (seguidas == quantidade) {
+                    Cadeira[] sugestao = new Cadeira[quantidade];
+                    for (int k = 0; k < quantidade; k+=1) {
+                        sugestao[k] = cadeiras[i][j - quantidade + 1 + k];
+                    }
+                    return sugestao;
+                }
+            }
+        }
+        return null;
+    }
+
     public boolean jaPassou(String agora) {
         return horario.substring(0, 5).compareTo(agora) < 0;
     }
