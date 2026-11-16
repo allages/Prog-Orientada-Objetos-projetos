@@ -4,6 +4,7 @@ public class Sessao {
     private Filme filme;
     private String horario;
     private Cadeira[][] cadeiras = new Cadeira[10][15];
+    private static String horaAtual = "12:00";
 
 
     public Sessao(Filme filme , String horario ){
@@ -45,6 +46,27 @@ public class Sessao {
             throw VendasException.poltronaOcupada(linha * 15 + coluna + 1);
         }
         cadeira.setOcupada(true);
+    }
+
+    public boolean jaPassou(String agora) {
+        return horario.substring(0, 5).compareTo(agora) < 0;
+    }
+
+    public void validarVenda(String agora) throws VendasException {
+        if (!filme.isEmCartaz()) {
+            throw VendasException.foraDeCartaz(filme.getNome());
+        }
+        if (jaPassou(agora)) {
+            throw VendasException.horarioPassado(filme.getNome());
+        }
+    }
+
+    public static String getHoraAtual() {
+        return horaAtual;
+    }
+
+    public void validarVenda() throws VendasException {
+        validarVenda(horaAtual);
     }
 
 
