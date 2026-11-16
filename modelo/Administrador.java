@@ -6,6 +6,7 @@ public class Administrador extends Base implements GerenciaFilmes {
     private double salario;
     private int id;
     private static ArrayList<Base> usuarios = new ArrayList<>();
+    private static ArrayList<Usuario> clientes = new ArrayList<>();
     private static ArrayList<Filme> filmes = new ArrayList<>();
 
 
@@ -39,6 +40,10 @@ public class Administrador extends Base implements GerenciaFilmes {
         this.id = id;
     }
 
+    public static ArrayList<Usuario> getClientes() {
+        return clientes;
+    }
+
     @Override
     public void adicionarUsuario() {
         usuarios.add(this);
@@ -54,7 +59,6 @@ public class Administrador extends Base implements GerenciaFilmes {
 
     public void excluirUsuario(String email) {
         usuarios.removeIf(u -> u.getEmail().equalsIgnoreCase(email));
-
     }
 
     @Override
@@ -84,5 +88,13 @@ public class Administrador extends Base implements GerenciaFilmes {
                 return;
             }
         }
+    }
+
+    public void adicionarCliente(Usuario usuario) {
+        clientes.add(usuario);
+    }
+
+    public void excluirCliente(String email) {
+        clientes.removeIf(u -> u.getEmail().equalsIgnoreCase(email));
     }
 }
