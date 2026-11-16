@@ -17,6 +17,7 @@ public class Filme {
         this.valor = valor;
         this.nota = 0.0;
         this.quantidade_criticos = 0;
+        this.emCartaz = true;
     }
 
     public String getNome() {
