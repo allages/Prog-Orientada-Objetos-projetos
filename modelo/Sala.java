@@ -25,4 +25,9 @@ public class Sala {
         this.sessoes = sessoes;
     }
 
+    public double calcularValor(Filme filme) {
+        return filme.getValor() * tipo.getMultiplicador();
+    }
+
+
 }
