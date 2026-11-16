@@ -52,9 +52,14 @@ public class Administrador extends Base implements GerenciaFilmes{
     }
     @Override 
     public void excluirFilme(String nome){
+        for (Filme f : filmes) {
+            if (f.getNome().equalsIgnoreCase(nome)) {
+                f.setEmCartaz(false);
+            }
+        }
         filmes.removeIf(f -> f.getNome().equalsIgnoreCase(nome));
-
     }
+
     @Override 
     public void incluirFilme(Filme filme){
         filmes.add(filme);
