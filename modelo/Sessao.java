@@ -35,6 +35,17 @@ public class Sessao {
         }
         return null;
     }
+    public void ocuparCadeira(int linha, int coluna) throws VendasException {
+        Cadeira cadeira = getCadeira(linha, coluna);
+
+        if (cadeira == null) {
+            throw new VendasException("Cadeira inexistente");
+        }
+        if (cadeira.isOcupada()) {
+            throw VendasException.poltronaOcupada(linha * 15 + coluna + 1);
+        }
+        cadeira.setOcupada(true);
+    }
 
 
 }
