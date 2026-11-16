@@ -63,6 +63,7 @@ public class CompraController {
     public Bilhete comprarBilhete(Compra compra, Usuario usuario, Sala sala, Sessao sessao,
                                   int linha, int coluna, CupomPromocional cupom) throws VendasException {
         sessao.validarVenda();
+        validarMesmaSessao(compra, sessao);
 
         if (compra.getQtdBilhetes() >= compra.getBilhetes().length) {
             throw new VendasException("Limite de bilhetes da compra atingido");
@@ -93,6 +94,7 @@ public class CompraController {
     public List<Bilhete> comprarBilhetes(Compra compra, Usuario usuario, Sala sala, Sessao sessao,
                                          Cadeira[] cadeiras, CupomPromocional cupom) throws VendasException {
         sessao.validarVenda();
+        validarMesmaSessao(compra, sessao);
 
         if (compra.getQtdBilhetes() + cadeiras.length > compra.getBilhetes().length) {
             throw new VendasException("Limite de bilhetes da compra atingido");
@@ -136,4 +138,77 @@ public class CompraController {
             throw new VendasException("Limite de itens da compra atingido");
         }
     }
+
+    private void validarMesmaSessao(Compra compra, Sessao sessao) throws VendasException {
+        if (compra.getQtdBilhetes() > 0 && compra.getBilhetes()[0].getSessao() != sessao) {
+            throw new VendasException("Todos os bilhetes de uma compra devem ser da mesma sessão");
+        }
+    }
+
+    public double finalizarCompra(Usuario usuario, Compra compra) throws VendasException {
+        if (compra.getQtdBilhetes() == 0) {
+            throw new VendasException("A compra precisa ter pelo menos um bilhete");
+        }
+        if (usuario.getCompras().contains(compra)) {
+            throw new VendasException("Esta compra já foi finalizada");
+        }
+        double valorAPagar = usuario.comprarBilhete(compra);
+        usuario.adicionarCompra(compra);
+        return valorAPagar;
+    }
+
+    public void cancelarCompra(Usuario usuario, Compra compra) throws VendasException {
+        if (!usuario.getCompras().contains(compra)) {
+            throw new VendasException("Compra não encontrada no histórico do usuário");
+        }
+        Sessao sessao = compra.getBilhetes()[0].getSessao();
+        usuario.cancelarCompra(compra, sessao);
+    }
+
+    public void descartarCompra(Compra compra) {
+        if (compra.getQtdBilhetes() > 0) {
+            compra.cancelarCompra(compra.getBilhetes()[0].getSessao());
+        }
+    }
+
+    public void alterarCadeiras(Usuario usuario, Compra compra, Cadeira[] novasCadeiras) throws VendasException {
+        if (!usuario.getCompras().contains(compra)) {
+            throw new VendasException("Compra não encontrada no histórico do usuário");
+        }
+        int quantidade = compra.getQtdBilhetes();
+        if (novasCadeiras.length != quantidade) {
+            throw new VendasException("Informe " + quantidade + " cadeiras, uma para cada bilhete");
+        }
+
+        Bilhete[] bilhetes = compra.getBilhetes();
+        Sessao sessao = bilhetes[0].getSessao();
+        sessao.validarVenda();
+
+        Cadeira[] antigas = new Cadeira[quantidade];
+        for (int i = 0; i < quantidade; i++) {
+            antigas[i] = bilhetes[i].getCadeira();
+            antigas[i].setOcupada(false);
+        }
+
+        List<Cadeira> ocupadas = new ArrayList<>();
+        try {
+            for (Cadeira c : novasCadeiras) {
+                sessao.ocuparCadeira(c.getLinha(), c.getColuna());
+                ocupadas.add(c);
+            }
+        } catch (VendasException e) {
+            for (Cadeira c : ocupadas) {
+                sessao.getCadeira(c.getLinha(), c.getColuna()).setOcupada(false);
+            }
+            for (Cadeira c : antigas) {
+                c.setOcupada(true);
+            }
+            throw e;
+        }
+
+        for (int i = 0; i < quantidade; i++) {
+            bilhetes[i].setCadeira(sessao.getCadeira(novasCadeiras[i].getLinha(), novasCadeiras[i].getColuna()));
+        }
+    }
+
 }
