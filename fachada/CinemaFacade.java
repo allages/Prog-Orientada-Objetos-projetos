@@ -158,17 +158,4 @@ public class CinemaFacade {
         adminCtrl.excluirFuncionario(adm, email);
     }
 
-    public void avaliarFilme(String user, String senha, String nomeFilme, double nota, String comentario)
-            throws VendasException {
-        Usuario usuario = usuarioCtrl.login(user, senha);
-        if (!(usuario instanceof Critico)) {
-            throw new VendasException("Apenas críticos podem avaliar filmes");
-        }
-        Filme filme = filmeCtrl.buscarFilme(nomeFilme);
-        criticoCtrl.avaliar((Critico) usuario, filme, nota, comentario);
-    }
-
-    public List<Critica> listarCriticas(String nomeFilme) throws VendasException {
-        return criticoCtrl.listarCriticas(filmeCtrl.buscarFilme(nomeFilme));
-    }
 }
