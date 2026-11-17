@@ -33,6 +33,22 @@ public class Main {
                 opcao = Integer.parseInt(sc.nextLine());
 
                 if (opcao == 1) {
+                    System.out.println("Tipo: 1 - Comum | 2 - Estudante (50% de desconto) | 3 - Crítico (grátis)");
+                    System.out.print("Tipo: ");
+                    int escolhaTipo = Integer.parseInt(sc.nextLine());
+                    String tipo;
+                    String origem = null;
+                    if (escolhaTipo == 1) {
+                        tipo = "comum";
+                    } else if (escolhaTipo == 2) {
+                        tipo = "estudante";
+                    } else if (escolhaTipo == 3) {
+                        tipo = "critico";
+                        System.out.print("Órgão de origem: ");
+                        origem = sc.nextLine();
+                    } else {
+                        throw new VendasException("Tipo de usuário inválido");
+                    }
                     System.out.print("Usuário: ");
                     String user = sc.nextLine();
                     System.out.print("CPF: ");
@@ -43,7 +59,7 @@ public class Main {
                     String email = sc.nextLine();
                     System.out.print("Idade: ");
                     int idade = Integer.parseInt(sc.nextLine());
-                    cinema.cadastrarCliente(user, cpf, senha, email, idade);
+                    cinema.cadastrarCliente(tipo, user, cpf, senha, email, idade, origem);
                     System.out.println("Cliente cadastrado!");
 
                 } else if (opcao == 2) {

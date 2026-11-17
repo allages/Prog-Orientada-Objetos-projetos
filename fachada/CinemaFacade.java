@@ -58,11 +58,19 @@ public class CinemaFacade {
         Sala tresD = new Sala(TiposSala.TRES_D);
         filmeCtrl.criarSessao(tresD, 0, filmeB, "20:00");
         salas.add(tresD);
+
+        Sala xd = new Sala(TiposSala.XD);
+        filmeCtrl.criarSessao(xd, 0, filme, "19:00");
+        salas.add(xd);
+
+        Sala xd3d = new Sala(TiposSala.XD_3D);
+        filmeCtrl.criarSessao(xd3d, 0, filmeB, "21:00");
+        salas.add(xd3d);
     }
 
-    public void cadastrarCliente(String user, String cpf, String senha, String email, int idade)
-            throws VendasException {
-        usuarioCtrl.cadastrar("comum", user, cpf, senha, 'M', email, idade, "Cartão", "0000", "000", null);
+    public void cadastrarCliente(String tipo, String user, String cpf, String senha, String email,
+                                 int idade, String origem) throws VendasException {
+        usuarioCtrl.cadastrar(tipo, user, cpf, senha, 'M', email, idade, "Cartão", "0000", "000", origem);
     }
 
     public List<Filme> listarFilmes() {
