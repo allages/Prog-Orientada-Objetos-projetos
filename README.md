@@ -43,6 +43,6 @@ java -cp out Main
 
 No IntelliJ, abra o projeto e execute o `Main`. O menu permite cadastrar cliente, ver filmes e comprar bilhete, e as demais operações (equipe, administração e críticos) estão disponíveis na `CinemaFacade`.
 
-### Senha de acesso ao ADM
+### Acesso ao ADM
 * ana@cine.com
 * ID: 1
