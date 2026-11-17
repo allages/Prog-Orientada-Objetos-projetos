@@ -11,7 +11,7 @@ public class Funcionario extends Base implements GerenciaFilmes {
     public double getSalario() {
         return salario;
     }
-z
+
     public void setSalario(double salario) {
         this.salario = salario;
     }
