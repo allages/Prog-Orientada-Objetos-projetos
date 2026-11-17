@@ -3,34 +3,40 @@ package modelo;
 public class Funcionario extends Base implements GerenciaFilmes {
     private double salario;
 
-    public Funcionario(String email ,int idade , String nome , double salario){
-        super(nome , idade , email);
+    public Funcionario(String email, int idade, String nome, double salario) {
+        super(nome, idade, email);
         this.salario = salario;
     }
-    public double getSalario(){
+
+    public double getSalario() {
         return salario;
     }
-    public void setSalario(double salario){
+z
+    public void setSalario(double salario) {
         this.salario = salario;
     }
 
-    @Override 
-    public void adicionarUsuario(){
-        Administrador.getUsuarios().add(this);
+    @Override
+    public void adicionarUsuario() {
+        if (!Administrador.getUsuarios().contains(this)) {
+            Administrador.getUsuarios().add(this);
+        }
     }
 
-    @Override 
-    public void alterarUsuario(String nome , int idade , String email){
+    @Override
+    public void alterarUsuario(String nome, int idade, String email) {
         setNome(nome);
         setIdade(idade);
         setEmail(email);
     }
-    @Override 
-    public void incluirFilme(Filme filme){
+
+    @Override
+    public void incluirFilme(Filme filme) {
         Administrador.getFilmes().add(filme);
     }
-    @Override 
-    public void excluirFilme(String nome){
+
+    @Override
+    public void excluirFilme(String nome) {
         for (Filme f : Administrador.getFilmes()) {
             if (f.getNome().equalsIgnoreCase(nome)) {
                 f.setEmCartaz(false);
@@ -39,8 +45,8 @@ public class Funcionario extends Base implements GerenciaFilmes {
         Administrador.getFilmes().removeIf(f -> f.getNome().equalsIgnoreCase(nome));
     }
 
-    @Override 
-    public void alterarFilme(String nome , Filme filmeAtualizado){
+    @Override
+    public void alterarFilme(String nome, Filme filmeAtualizado) {
         for (Filme f : Administrador.getFilmes()) {
             if (f.getNome().equalsIgnoreCase(nome)) {
                 f.setNome(filmeAtualizado.getNome());
@@ -51,10 +57,4 @@ public class Funcionario extends Base implements GerenciaFilmes {
             }
         }
     }
-
-
-
-
-
-    
 }
