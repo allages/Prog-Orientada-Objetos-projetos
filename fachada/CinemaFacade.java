@@ -1,3 +1,4 @@
+// O facade junta todos os controllers numa chamada só
 package fachada;
 
 import java.util.ArrayList;
@@ -85,7 +86,6 @@ public class CinemaFacade {
         return compraCtrl.listarSessoes(buscarSala(indiceSala));
     }
 
-    // Um único método esconde: login + iniciar compra + comprar bilhete + finalizar compra
     public double comprarBilhete(String user, String senha, int indiceSala, int indiceSessao,
                                  int linha, int coluna) throws VendasException {
         Usuario usuario = usuarioCtrl.login(user, senha);
@@ -121,13 +121,11 @@ public class CinemaFacade {
                              String sinopse, double valor) throws VendasException {
         Filme antigo = filmeCtrl.buscarFilme(nome);
         Filme novo = new Filme(novoNome, duracao, sinopse, valor);
-        // mantém notas, críticas e situação de cartaz do filme original
         novo.setNota(antigo.getNota());
         novo.setQuantidade_criticos(antigo.getQuantidade_criticos());
         novo.setCritica(antigo.getCritica());
         novo.setEmCartaz(antigo.isEmCartaz());
         filmeCtrl.alterarFilme(adm, nome, novo);
-        // as sessões passam a exibir o filme atualizado
         for (Sala sala : salas) {
             for (Sessao sessao : sala.getSessoes()) {
                 if (sessao != null && sessao.getFilme() == antigo) {
@@ -140,7 +138,6 @@ public class CinemaFacade {
     public void excluirFilme(Administrador adm, String nome) throws VendasException {
         Filme filme = filmeCtrl.buscarFilme(nome);
         filmeCtrl.excluirFilme(adm, nome);
-        // sessões que ainda usam o filme passam a recusar a venda (fora de cartaz)
         filme.setEmCartaz(false);
     }
 
@@ -160,7 +157,6 @@ public class CinemaFacade {
     public void excluirFuncionario(Administrador adm, String email) throws VendasException {
         adminCtrl.excluirFuncionario(adm, email);
     }
-
 
     public void avaliarFilme(String user, String senha, String nomeFilme, double nota, String comentario)
             throws VendasException {
