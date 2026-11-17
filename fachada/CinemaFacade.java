@@ -48,9 +48,16 @@ public class CinemaFacade {
         Filme filme = new Filme("Filme A", 120, "Sinopse A", 20.0);
         filmeCtrl.incluirFilme(adm, filme);
 
-        Sala sala = new Sala(TiposSala.COMUM);
-        filmeCtrl.criarSessao(sala, 0, filme, "18:00");
-        salas.add(sala);
+        Filme filmeB = new Filme("Filme B", 100, "Sinopse B", 20.0);
+        filmeCtrl.incluirFilme(adm, filmeB);
+
+        Sala comum = new Sala(TiposSala.COMUM);
+        filmeCtrl.criarSessao(comum, 0, filme, "18:00");
+        salas.add(comum);
+
+        Sala tresD = new Sala(TiposSala.TRES_D);
+        filmeCtrl.criarSessao(tresD, 0, filmeB, "20:00");
+        salas.add(tresD);
     }
 
     public void cadastrarCliente(String user, String cpf, String senha, String email, int idade)
@@ -62,15 +69,18 @@ public class CinemaFacade {
         return filmeCtrl.listarFilmes();
     }
 
-    public List<Sessao> listarSessoes() {
-        return compraCtrl.listarSessoes(salas.get(0));
+    public List<Sala> listarSalas() {
+        return new ArrayList<>(salas);
     }
 
-    // Um único método esconde: login + iniciar compra + comprar bilhete + finalizar compra
-    public double comprarBilhete(String user, String senha, int indiceSessao, int linha, int coluna)
-            throws VendasException {
+    public List<Sessao> listarSessoes(int indiceSala) throws VendasException {
+        return compraCtrl.listarSessoes(buscarSala(indiceSala));
+    }
+
+    public double comprarBilhete(String user, String senha, int indiceSala, int indiceSessao,
+                                 int linha, int coluna) throws VendasException {
         Usuario usuario = usuarioCtrl.login(user, senha);
-        Sala sala = salas.get(0);
+        Sala sala = buscarSala(indiceSala);
         List<Sessao> sessoes = compraCtrl.listarSessoes(sala);
         if (indiceSessao < 0 || indiceSessao >= sessoes.size()) {
             throw new VendasException("Sessão inexistente");
@@ -86,14 +96,12 @@ public class CinemaFacade {
         }
     }
 
-
-
-
-
-
-
-
-
+    private Sala buscarSala(int indiceSala) throws VendasException {
+        if (indiceSala < 0 || indiceSala >= salas.size()) {
+            throw new VendasException("Sala inexistente");
+        }
+        return salas.get(indiceSala);
+    }
 
     public Administrador loginAdministrador(String email, int id) throws VendasException {
         return equipeCtrl.loginAdministrador(email, id);

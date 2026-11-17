@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 import fachada.CinemaFacade;
 import modelo.Filme;
+import modelo.Sala;
 import modelo.Sessao;
 import modelo.VendasException;
 
@@ -56,10 +57,19 @@ public class Main {
                     System.out.print("Senha: ");
                     String senha = sc.nextLine();
 
-                    List<Sessao> sessoes = cinema.listarSessoes();
+                    List<Sala> salas = cinema.listarSalas();
+                    for (int i = 0; i < salas.size(); i++) {
+                        System.out.println(i + " - Sala " + salas.get(i).getTipo().getTipo());
+                    }
+                    System.out.print("Sala: ");
+                    int indiceSala = Integer.parseInt(sc.nextLine());
+
+                    List<Sessao> sessoes = cinema.listarSessoes(indiceSala);
+                    Sala sala = salas.get(indiceSala);
                     for (int i = 0; i < sessoes.size(); i++) {
                         Sessao s = sessoes.get(i);
-                        System.out.println(i + " - " + s.getFilme().getNome() + " às " + s.getHorario());
+                        System.out.println(i + " - " + s.getFilme().getNome() + " às " + s.getHorario()
+                                + " - R$ " + sala.calcularValor(s.getFilme()));
                     }
                     System.out.print("Sessão: ");
                     int sessao = Integer.parseInt(sc.nextLine());
@@ -68,7 +78,7 @@ public class Main {
                     System.out.print("Coluna (0-14): ");
                     int coluna = Integer.parseInt(sc.nextLine());
 
-                    double total = cinema.comprarBilhete(user, senha, sessao, linha, coluna);
+                    double total = cinema.comprarBilhete(user, senha, indiceSala, sessao, linha, coluna);
                     System.out.println("Bilhete comprado! Total: R$ " + total);
                 }
             } catch (VendasException e) {
