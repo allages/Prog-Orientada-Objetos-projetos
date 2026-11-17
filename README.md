@@ -1,4 +1,4 @@
-# Projeto de POO - Sistema de Cinema
+7# Projeto de POO - Sistema de Cinema
 
 Este repositório contém o projeto de desenvolvimento de um **Sistema de Cinema**, desenvolvido para a cadeira de **Programação Orientada a Objetos (POO)**.
 
@@ -43,6 +43,6 @@ java -cp out Main
 
 No IntelliJ, abra o projeto e execute o `Main`. O menu permite cadastrar cliente, ver filmes e comprar bilhete, e as demais operações (equipe, administração e críticos) estão disponíveis na `CinemaFacade`.
 
-### Senha ADM
-ana@cine.com
-ID: 1
+### Senha de acesso ao ADM
+* ana@cine.com
+* ID: 1
