@@ -85,6 +85,7 @@ public class CinemaFacade {
         return compraCtrl.listarSessoes(buscarSala(indiceSala));
     }
 
+    // Um único método esconde: login + iniciar compra + comprar bilhete + finalizar compra
     public double comprarBilhete(String user, String senha, int indiceSala, int indiceSessao,
                                  int linha, int coluna) throws VendasException {
         Usuario usuario = usuarioCtrl.login(user, senha);
@@ -109,6 +110,38 @@ public class CinemaFacade {
             throw new VendasException("Sala inexistente");
         }
         return salas.get(indiceSala);
+    }
+
+    public void incluirFilme(Administrador adm, String nome, int duracao, String sinopse, double valor)
+            throws VendasException {
+        filmeCtrl.incluirFilme(adm, new Filme(nome, duracao, sinopse, valor));
+    }
+
+    public void alterarFilme(Administrador adm, String nome, String novoNome, int duracao,
+                             String sinopse, double valor) throws VendasException {
+        Filme antigo = filmeCtrl.buscarFilme(nome);
+        Filme novo = new Filme(novoNome, duracao, sinopse, valor);
+        // mantém notas, críticas e situação de cartaz do filme original
+        novo.setNota(antigo.getNota());
+        novo.setQuantidade_criticos(antigo.getQuantidade_criticos());
+        novo.setCritica(antigo.getCritica());
+        novo.setEmCartaz(antigo.isEmCartaz());
+        filmeCtrl.alterarFilme(adm, nome, novo);
+        // as sessões passam a exibir o filme atualizado
+        for (Sala sala : salas) {
+            for (Sessao sessao : sala.getSessoes()) {
+                if (sessao != null && sessao.getFilme() == antigo) {
+                    sessao.setFilme(novo);
+                }
+            }
+        }
+    }
+
+    public void excluirFilme(Administrador adm, String nome) throws VendasException {
+        Filme filme = filmeCtrl.buscarFilme(nome);
+        filmeCtrl.excluirFilme(adm, nome);
+        // sessões que ainda usam o filme passam a recusar a venda (fora de cartaz)
+        filme.setEmCartaz(false);
     }
 
     public Administrador loginAdministrador(String email, int id) throws VendasException {

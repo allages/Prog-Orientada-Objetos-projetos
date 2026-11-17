@@ -2,6 +2,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import fachada.CinemaFacade;
+import modelo.Administrador;
 import modelo.Filme;
 import modelo.Sala;
 import modelo.Sessao;
@@ -26,6 +27,7 @@ public class Main {
             System.out.println("1 - Cadastrar cliente");
             System.out.println("2 - Ver filmes");
             System.out.println("3 - Comprar bilhete");
+            System.out.println("4 - Gerenciar filmes (administrador)");
             System.out.println("0 - Sair");
             System.out.print("Opção: ");
 
@@ -64,7 +66,7 @@ public class Main {
 
                 } else if (opcao == 2) {
                     for (Filme f : cinema.listarFilmes()) {
-                        System.out.println("- " + f.getNome() + " (" + f.getDuracao() + " min)");
+                        System.out.println("- " + f.getNome() + " (" + f.getDuracao() + " min) - R$ " + f.getValor());
                     }
 
                 } else if (opcao == 3) {
@@ -96,6 +98,61 @@ public class Main {
 
                     double total = cinema.comprarBilhete(user, senha, indiceSala, sessao, linha, coluna);
                     System.out.println("Bilhete comprado! Total: R$ " + total);
+
+                } else if (opcao == 4) {
+                    System.out.print("E-mail do administrador: ");
+                    String emailAdm = sc.nextLine();
+                    System.out.print("ID: ");
+                    int idAdm = Integer.parseInt(sc.nextLine());
+                    Administrador adm = cinema.loginAdministrador(emailAdm, idAdm);
+
+                    int sub = -1;
+                    while (sub != 0) {
+                        System.out.println("\n--- FILMES ---");
+                        System.out.println("1 - Incluir filme");
+                        System.out.println("2 - Alterar filme");
+                        System.out.println("3 - Excluir filme");
+                        System.out.println("0 - Voltar");
+                        System.out.print("Opção: ");
+                        try {
+                            sub = Integer.parseInt(sc.nextLine());
+                            if (sub == 1) {
+                                System.out.print("Nome: ");
+                                String nome = sc.nextLine();
+                                System.out.print("Duração (min): ");
+                                int duracao = Integer.parseInt(sc.nextLine());
+                                System.out.print("Sinopse: ");
+                                String sinopse = sc.nextLine();
+                                System.out.print("Valor (use ponto, ex: 20.0): ");
+                                double valor = Double.parseDouble(sc.nextLine());
+                                cinema.incluirFilme(adm, nome, duracao, sinopse, valor);
+                                System.out.println("Filme incluído!");
+                            } else if (sub == 2) {
+                                System.out.print("Nome do filme a alterar: ");
+                                String nome = sc.nextLine();
+                                System.out.print("Novo nome: ");
+                                String novoNome = sc.nextLine();
+                                System.out.print("Nova duração (min): ");
+                                int duracao = Integer.parseInt(sc.nextLine());
+                                System.out.print("Nova sinopse: ");
+                                String sinopse = sc.nextLine();
+                                System.out.print("Novo valor (use ponto, ex: 20.0): ");
+                                double valor = Double.parseDouble(sc.nextLine());
+                                cinema.alterarFilme(adm, nome, novoNome, duracao, sinopse, valor);
+                                System.out.println("Filme alterado!");
+                            } else if (sub == 3) {
+                                System.out.print("Nome do filme a excluir: ");
+                                String nome = sc.nextLine();
+                                cinema.excluirFilme(adm, nome);
+                                System.out.println("Filme excluído!");
+                            }
+                        } catch (VendasException e) {
+                            System.out.println("Erro: " + e.getMessage());
+                        } catch (NumberFormatException e) {
+                            System.out.println("Digite um número válido.");
+                            sub = -1;
+                        }
+                    }
                 }
             } catch (VendasException e) {
                 System.out.println("Erro: " + e.getMessage());
