@@ -14,23 +14,7 @@ O objetivo principal é implementar um sistema completo de gerenciamento de cine
 * **Etapa 3:** Classes abstratas, interface e tratamento de exceções (`Base`, `Funcionário`, `Administrador`, `GerenciaFilmes` e `VendasException`), com a persistência de dados a cargo do administrador.
 * **Etapa 4:** Aplicação de um padrão de projeto (**Facade**) sobre o sistema já funcionando, com apresentação do projeto.
 
-## 🧩 O que foi implementado
-
-### Etapa 1 e 2: Model
-* **Sala de cinema** com grade de 10 linhas x 15 colunas de cadeiras e 7 horários por sala (horário sem sessão fica `null` e não aparece ao usuário).
-* **Compra** com um ou mais bilhetes e itens de balcão, e **sugestão de cadeiras juntas** quando há vários bilhetes.
-* **Enums:** `Produto` (6 itens de balcão), `CupomPromocional` (3 cupons: 10%, 20% e 30%) e `TiposSala` (Comum 1.0, 3D 1.2, XD 1.3 e XD/3D 1.4, que multiplicam o valor do ingresso).
-* **Herança e sobrescrita:** `Estudante` paga metade do valor e `Critico` não paga nada na compra de bilhetes.
-* **Sobrecarga:** os métodos de compra de bilhetes e de itens têm uma versão extra que recebe um `CupomPromocional`.
-* **Críticas:** `Critico` atribui nota (a média do filme é recalculada) e registra a crítica no vetor de comentários do filme.
-
-### Etapa 3: classes abstratas, interface e exceções
-* `Base` (abstrata) com nome, idade e e-mail, e os métodos abstratos de adicionar e alterar usuário.
-* `Funcionario` e `Administrador` (concretas) herdam de `Base` e implementam a interface `GerenciaFilmes` (incluir, excluir e alterar filme). Só o administrador exclui usuários.
-* `VendasException` trata os 3 erros pedidos na compra de bilhetes: **sessão que já passou**, **poltrona já ocupada** e **filme fora de cartaz**.
-* **Persistência:** listas dinâmicas (`ArrayList`) mantidas pelo `Administrador`, para usuários, clientes e filmes. Os dados ficam em memória enquanto o programa está rodando.
-
-### Etapa 4: arquitetura e padrão Facade
+## 🧩 Arquitetura e Padrão Implementado
 O projeto foi organizado em camadas, seguindo a ideia do **MVC**:
 
 | Pacote | Papel |
