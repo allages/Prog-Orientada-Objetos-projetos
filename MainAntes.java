@@ -15,6 +15,7 @@ import modelo.TiposSala;
 import modelo.Usuario;
 import modelo.VendasException;
 
+public class MainAntes {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
@@ -102,3 +103,4 @@ import modelo.VendasException;
         }
         System.out.println("Até logo!");
     }
+}
