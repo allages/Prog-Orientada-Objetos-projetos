@@ -14,7 +14,7 @@ O objetivo principal é implementar um sistema completo de gerenciamento de cine
 * **Etapa 3:** Classes abstratas, interface e tratamento de exceções (`Base`, `Funcionário`, `Administrador`, `GerenciaFilmes` e `VendasException`), com a persistência de dados a cargo do administrador.
 * **Etapa 4:** Aplicação de um padrão de projeto (**Facade**) sobre o sistema já funcionando, com apresentação do projeto.
 
-## 🧩 Arquitetura e Padrão Implementado
+## Arquitetura e Padrão Implementado
 O projeto foi organizado em camadas, seguindo a ideia do **MVC**:
 
 | Pacote | Papel |
@@ -24,7 +24,7 @@ O projeto foi organizado em camadas, seguindo a ideia do **MVC**:
 | `Main` | **View:** menu de console |
 | `fachada` | **Facade:** porta de entrada única para os controllers |
 
-## 📁 Estrutura do repositório
+## Estrutura do repositório
 
 ```
 ├── modelo/     Classes de domínio, enums, interface e exceção
@@ -34,13 +34,15 @@ O projeto foi organizado em camadas, seguindo a ideia do **MVC**:
 └── MainAntes.java   Menu de console sem o Facade 
 ```
 
-## ▶️ Como executar
-
-Pela raiz do projeto:
+## Execução
 
 ```bash
 javac -d out modelo/*.java controle/*.java fachada/*.java Main.java MainAntes.java
 java -cp out Main
 ```
 
-No IntelliJ, basta abrir o projeto e executar o `Main`. O sistema já inicia com um administrador, o filme "Filme A" e uma sessão às 18:00, para facilitar os testes. O menu permite cadastrar cliente, ver filmes e comprar bilhete, e as demais operações (equipe, administração e críticos) estão disponíveis na `CinemaFacade`.
+No IntelliJ, abra o projeto e execute o `Main`. O menu permite cadastrar cliente, ver filmes e comprar bilhete, e as demais operações (equipe, administração e críticos) estão disponíveis na `CinemaFacade`.
+
+### Senha ADM
+ana@cine.com
+ID: 1
