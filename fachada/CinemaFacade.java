@@ -3,11 +3,17 @@ package fachada;
 import java.util.ArrayList;
 import java.util.List;
 
+import controle.AdministradorController;
 import controle.CompraController;
+import controle.CriticoController;
+import controle.EquipeController;
 import controle.FilmeController;
 import controle.UsuarioController;
 import modelo.Administrador;
 import modelo.Compra;
+import modelo.Critica;
+import modelo.Critico;
+import modelo.Funcionario;
 import modelo.Filme;
 import modelo.Sala;
 import modelo.Sessao;
@@ -20,6 +26,9 @@ public class CinemaFacade {
     private UsuarioController usuarioCtrl;
     private FilmeController filmeCtrl;
     private CompraController compraCtrl;
+    private EquipeController equipeCtrl;
+    private AdministradorController adminCtrl;
+    private CriticoController criticoCtrl;
     private List<Sala> salas;
 
     public CinemaFacade() {
@@ -27,6 +36,9 @@ public class CinemaFacade {
         this.usuarioCtrl = new UsuarioController();
         this.filmeCtrl = new FilmeController();
         this.compraCtrl = new CompraController(salas);
+        this.equipeCtrl = new EquipeController();
+        this.adminCtrl = new AdministradorController(compraCtrl);
+        this.criticoCtrl = new CriticoController();
     }
 
     public void carregarDadosIniciais() throws VendasException {
@@ -54,6 +66,7 @@ public class CinemaFacade {
         return compraCtrl.listarSessoes(salas.get(0));
     }
 
+    // Um único método esconde: login + iniciar compra + comprar bilhete + finalizar compra
     public double comprarBilhete(String user, String senha, int indiceSessao, int linha, int coluna)
             throws VendasException {
         Usuario usuario = usuarioCtrl.login(user, senha);
@@ -71,5 +84,46 @@ public class CinemaFacade {
             compraCtrl.descartarCompra(compra);
             throw e;
         }
+    }
+
+
+
+
+
+
+
+
+
+
+    public Administrador loginAdministrador(String email, int id) throws VendasException {
+        return equipeCtrl.loginAdministrador(email, id);
+    }
+
+    public Funcionario cadastrarFuncionario(Administrador adm, String nome, int idade,
+                                            String email, double salario) throws VendasException {
+        return equipeCtrl.cadastrarFuncionario(adm, nome, idade, email, salario);
+    }
+
+    public void excluirCliente(Administrador adm, String email) throws VendasException {
+        adminCtrl.excluirCliente(adm, email);
+    }
+
+    public void excluirFuncionario(Administrador adm, String email) throws VendasException {
+        adminCtrl.excluirFuncionario(adm, email);
+    }
+
+
+    public void avaliarFilme(String user, String senha, String nomeFilme, double nota, String comentario)
+            throws VendasException {
+        Usuario usuario = usuarioCtrl.login(user, senha);
+        if (!(usuario instanceof Critico)) {
+            throw new VendasException("Apenas críticos podem avaliar filmes");
+        }
+        Filme filme = filmeCtrl.buscarFilme(nomeFilme);
+        criticoCtrl.avaliar((Critico) usuario, filme, nota, comentario);
+    }
+
+    public List<Critica> listarCriticas(String nomeFilme) throws VendasException {
+        return criticoCtrl.listarCriticas(filmeCtrl.buscarFilme(nomeFilme));
     }
 }
